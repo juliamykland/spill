@@ -45,8 +45,8 @@ screen.blit(spiller_size, (spillerx, spillery))
 
 redball = pygame.image.load("red.png")
 redball_size = pygame.transform.scale(redball, (redballbredde, redballhoyde))
-redx = randint(10, bredde-10)
-redy = randint (10, hoyde-10)
+redx = randint(25, bredde-25)
+redy = randint (25, hoyde-25)
 drx=10
 dry=10
 
@@ -54,8 +54,8 @@ screen.blit(redball_size, (redx, redy))
 
 greenball = pygame.image.load("green.png")
 greenball_size = pygame.transform.scale(greenball, (greenballbredde, greenballhoyde))
-greenx = randint (15, bredde-15)
-greeny = randint (15, hoyde-15)
+greenx = randint (25, bredde-25)
+greeny = randint (25, hoyde-25)
 dgx = 15
 dgy = 15
 screen.blit(greenball_size, (dgx, dgy))
@@ -70,8 +70,18 @@ screen.blit(blueball_size, (dbx, dby))
 
 
 crash_sound = pygame.mixer.Sound("pig_oink.wav") 
+starttime = time.time()
+gametime = 60
+gameover=False
 
 while not done:
+    actualtime = time.time() - starttime
+    remainingtime = gametime - actualtime
+    timetxt = "Time: "+str(int(remainingtime))
+    timetext = font.render(timetxt, 1, red)
+    if remainingtime < 0:
+        done = True
+        gameover=True
     redx = redx + drx
     redy = redy + dry
     if redx<0 or redx>bredde-redballbredde:
@@ -92,22 +102,22 @@ while not done:
         dby = -dby
     score = "Score: "+str(poeng)
     scoretext = font.render(score, 1, red)
-    if abs (redx - spillerx) < 20 and abs (redy - spillery) < 20:
+    if abs (redx - spillerx) < spillerbredde  and abs (redy - spillery) < spillerhoyde:
         poeng = poeng + 1
-        redx = randint(10, bredde-10)
-        redy = randint (10, hoyde-10)
+        redx = randint(redballbredde, bredde-redballbredde)
+        redy = randint (redballhoyde, hoyde-redballhoyde)
         crash_sound.play()
         pygame.mixer.music.stop()
     if abs (greenx - spillerx) < 20 and abs (greeny - spillery) < 20:
         poeng = poeng + 2
-        greenx = randint (10, bredde-10)
-        greeny = randint (10, hoyde-10)
+        greenx = randint (greenballbredde, bredde-greenballbredde)
+        greeny = randint (greenballhoyde, hoyde-greenballhoyde)
         crash_sound.play()
         pygame.mixer.music.stop()
     if abs (bluex - spillerx) < 20 and abs (bluey - spillery) < 20:
         poeng = poeng + 2
-        bluex = randint (10, bredde-10)
-        bluey = randint (10, hoyde-10)
+        bluex = randint (blueballbredde, bredde-blueballbredde)
+        bluey = randint (blueballhoyde, hoyde-blueballhoyde)
         crash_sound.play()
         pygame.mixer.music.stop()
         
@@ -151,10 +161,10 @@ while not done:
     screen.blit(spiller_size, (spillerx, spillery))
     screen.blit(redball_size, (redx, redy))
     screen.blit(scoretext, (20, 20))
+    screen.blit(timetext, (700,20))
     screen.blit(greenball_size, (greenx, greeny))
     screen.blit (blueball_size, (bluex, bluey))
     pygame.display.update()
-
-#pygame.display.quit()
+    
 pygame.quit()
 quit()
